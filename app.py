@@ -80,3 +80,7 @@ def deletar_viagem(id):
 # Executar a aplicação
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
+
+@app.route('/')
+def home():
+    return "Bem-vindo à API de Viagens!"
