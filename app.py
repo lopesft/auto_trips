@@ -10,15 +10,16 @@ viagens = []
 def cadastrar_viagem():
     dados = request.json  # Dados enviados na requisição
     # Verificar se todos os campos obrigatórios estão presentes
-    if not all(k in dados for k in ("destino", "data", "preco")):
-        return jsonify({"erro": "Os campos 'destino', 'data' e 'preco' são obrigatórios!"}), 400
+    if not all(k in dados for k in ("destino", "data", "preco","descricao")):
+        return jsonify({"erro": "Os campos 'destino', 'data', 'preco' e 'descricao' são obrigatórios!"}), 400
 
     # Criar a nova viagem
     nova_viagem = {
         "id": len(viagens) + 1,
         "destino": dados["destino"],
         "data": dados["data"],
-        "preco": dados["preco"]
+        "preco": dados["preco"],
+        "descricao": dados["descricao"],
     }
     viagens.append(nova_viagem)  # Adicionar à lista
     return jsonify(nova_viagem), 201  # Retornar a viagem cadastrada com status 201 (Criado)
