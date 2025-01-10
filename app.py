@@ -10,7 +10,7 @@ viagens = []
 def cadastrar_viagem():
     dados = request.json  # Dados enviados na requisição
     # Verificar se todos os campos obrigatórios estão presentes
-    if not all(k in dados for k in ("destino", "data", "preco","descricao")):
+    if not all(k in dados for k in ("destino", "data", "preco", "descricao")):
         return jsonify({"erro": "Os campos 'destino', 'data', 'preco' e 'descricao' são obrigatórios!"}), 400
 
     # Criar a nova viagem
@@ -29,8 +29,18 @@ def cadastrar_viagem():
 def listar_viagens():
     return jsonify(viagens), 200  # Retorna a lista de viagens com status 200 (OK)
 
+# Rota para excluir uma viagem por ID
+@app.route('/viagens/<int:viagem_id>', methods=['DELETE'])
+def excluir_viagem(viagem_id):
+    global viagens
+    # Procurar a viagem pelo ID
+    viagem = next((v for v in viagens if v["id"] == viagem_id), None)
+    if viagem is None:
+        return jsonify({"erro": "Viagem não encontrada!"}), 404
+    
+    viagens = [v for v in viagens if v["id"] != viagem_id]  # Remover a viagem da lista
+    return jsonify({"mensagem": "Viagem excluída com sucesso!"}), 200
+
 # Executar a aplicação
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
-
-    
