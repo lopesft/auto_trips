@@ -20,9 +20,8 @@ class Viagem(db.Model):
         return f"<Viagem {self.destino}>"
 
 # Criar o banco de dados (vai criar o arquivo viagens.db se não existir)
-@app.before_first_request
-def create_tables():
-    db.create_all()
+with app.app_context():
+    db.create_all()  # Criação das tabelas, se ainda não existirem
 
 # Rota para cadastrar uma nova viagem
 @app.route('/viagens', methods=['POST'])
