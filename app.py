@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 app = Flask(__name__)
 
 # Configuração do banco de dados SQLite
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')  # Obtendo a URI do PostgreSQL
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://auto_trips_db_user:FHmSPSsC7fGN1N5bGdILCYsEJrP7wz5R@dpg-cu0lc4rqf0us73b0p61g-a.oregon-postgres.render.com/auto_trips_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False  # Desabilitar o rastreamento de modificações
 db = SQLAlchemy(app)
 
