@@ -75,9 +75,9 @@ def listar_viagens():
     quantidade_trips = len(viagens)
 
     # Estrutura de resposta com a quantidade de viagens
-    trips = {}
-    for idx, v in enumerate(viagens, start=1):
-        trips[f"trip{idx}"] = {
+    trips = []
+    for v in viagens:
+        trips.append({
             "id": v.id,
             "destino": v.destino,
             "data": v.data,
@@ -85,7 +85,7 @@ def listar_viagens():
             "descricao": v.descricao,
             "categoria": v.categoria,
             "agencia": v.agencia
-        }
+        })
 
     # Retornando a resposta com a quantidade de viagens
     return jsonify({
