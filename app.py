@@ -76,7 +76,8 @@ def listar_viagens():
         viagens = Viagem.query.all()
 
     if not viagens:
-        return jsonify(0), 200  # Retorna 0 quando nenhuma viagem é encontrada
+        # Retorna quantidade_trips como 0 e uma lista vazia
+        return jsonify({"quantidade_trips": 0, "trips": []}), 200
 
     if index is not None:  # Se um índice for fornecido
         if 0 <= index < len(viagens):  # Valida o índice
