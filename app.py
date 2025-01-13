@@ -71,7 +71,10 @@ def listar_viagens():
     else:
         viagens = Viagem.query.all()
 
-    # Estrutura de resposta no formato desejado
+    # Contando a quantidade de viagens
+    quantidade_trips = len(viagens)
+
+    # Estrutura de resposta com a quantidade de viagens
     trips = {}
     for idx, v in enumerate(viagens, start=1):
         trips[f"trip{idx}"] = {
@@ -84,7 +87,11 @@ def listar_viagens():
             "agencia": v.agencia
         }
 
-    return jsonify({"trips": trips}), 200
+    # Retornando a resposta com a quantidade de viagens
+    return jsonify({
+        "quantidade_trips": quantidade_trips,
+        "trips": trips
+    }), 200
 
 # Rota para deletar uma viagem pelo ID
 @app.route('/viagens/<int:id>', methods=['DELETE'])
