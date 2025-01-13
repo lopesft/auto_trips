@@ -62,36 +62,41 @@ def cadastrar_viagem():
         "agencia": nova_viagem.agencia
     }), 201
 
-# Rota para listar todas as viagens ou filtrar por categoria
 @app.route('/viagens', methods=['GET'])
 def listar_viagens():
     categoria = request.args.get('categoria')
+    index = request.args.get('index', type=int)  # Novo parâmetro opcional para índice específico
+    
     if categoria:
         viagens = Viagem.query.filter_by(categoria=categoria).all()
     else:
         viagens = Viagem.query.all()
 
-    # Contando a quantidade de viagens
-    quantidade_trips = len(viagens)
+    if not viagens:
+        return jsonify({"erro": "Nenhuma viagem encontrada!"}), 404
 
-    # Estrutura de resposta com a quantidade de viagens
-    trips = []
-    for v in viagens:
-        trips.append({
-            "id": v.id,
-            "destino": v.destino,
-            "data": v.data,
-            "preco": v.preco,
-            "descricao": v.descricao,
-            "categoria": v.categoria,
-            "agencia": v.agencia
-        })
+    if index is not None:  # Se um índice for fornecido
+        if 0 <= index < len(viagens):  # Valida o índice
+            viagem = viagens[index]
+            return jsonify({
+                "agencia": viagem.agencia,
+                "categoria": viagem.categoria,
+                "data": viagem.data,
+                "descricao": viagem.descricao,
+                "destino": viagem.destino,
+                "id": viagem.id,
+                "preco": viagem.preco
+            }), 200
+        else:
+            return jsonify({"erro": "Índice fora do intervalo!"}), 400
 
-    # Retornando a resposta com a quantidade de viagens
-    return jsonify({
-        "quantidade_trips": quantidade_trips,
-        "trips": trips
-    }), 200
+    # Caso contrário, retorna todas as viagens
+    trips = [{"agencia": v.agencia, "categoria": v.categoria, "data": v.data, 
+              "descricao": v.descricao, "destino": v.destino, "id": v.id, 
+              "preco": v.preco} for v in viagens]
+
+    return jsonify({"quantidade_trips": len(trips), "trips": trips}), 200
+
 
 # Rota para deletar uma viagem pelo ID
 @app.route('/viagens/<int:id>', methods=['DELETE'])
