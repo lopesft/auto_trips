@@ -18,6 +18,7 @@ class Viagem(db.Model):
     descricao = db.Column(db.Text, nullable=False)
     categoria = db.Column(db.String(50), nullable=False)  # Categoria da viagem
     agencia = db.Column(db.String(100), nullable=False)   # Nome da agência
+    imagem_url = db.Column(db.String(255), nullable=True)  # URL da imagem
 
     def __repr__(self):
         return f"<Viagem {self.destino}>"
@@ -47,7 +48,8 @@ def cadastrar_viagem():
         preco=dados["preco"],
         descricao=dados["descricao"],
         categoria=dados["categoria"],
-        agencia=dados["agencia"]
+        agencia=dados["agencia"],
+        imagem_url=dados.get("imagem_url")  # Campo opcional
     )
     db.session.add(nova_viagem)
     db.session.commit()
@@ -59,7 +61,8 @@ def cadastrar_viagem():
         "preco": nova_viagem.preco,
         "descricao": nova_viagem.descricao,
         "categoria": nova_viagem.categoria,
-        "agencia": nova_viagem.agencia
+        "agencia": nova_viagem.agencia,
+        "imagem_url": nova_viagem.imagem_url  # Retorna o URL da imagem
     }), 201
 
 @app.route('/viagens', methods=['GET'])
@@ -85,7 +88,8 @@ def listar_viagens():
                 "descricao": viagem.descricao,
                 "destino": viagem.destino,
                 "id": viagem.id,
-                "preco": viagem.preco
+                "preco": viagem.preco,
+                "imagem_url": viagem.imagem_url  # Retorna o URL da imagem
             }), 200
         else:
             return jsonify({"erro": "Índice fora do intervalo!"}), 400
@@ -93,7 +97,7 @@ def listar_viagens():
     # Caso contrário, retorna todas as viagens
     trips = [{"agencia": v.agencia, "categoria": v.categoria, "data": v.data, 
               "descricao": v.descricao, "destino": v.destino, "id": v.id, 
-              "preco": v.preco} for v in viagens]
+              "preco": v.preco, "imagem_url": v.imagem_url} for v in viagens]
 
     return jsonify({"quantidade_trips": len(trips), "trips": trips}), 200
 
