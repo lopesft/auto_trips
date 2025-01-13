@@ -76,7 +76,7 @@ def listar_viagens():
         viagens = Viagem.query.all()
 
     if not viagens:
-        return jsonify({"erro": "Nenhuma viagem encontrada!"}), 404
+        return jsonify(0), 200  # Retorna 0 quando nenhuma viagem é encontrada
 
     if index is not None:  # Se um índice for fornecido
         if 0 <= index < len(viagens):  # Valida o índice
