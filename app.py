@@ -71,15 +71,20 @@ def listar_viagens():
     else:
         viagens = Viagem.query.all()
 
-    return jsonify([{
-        "id": v.id,
-        "destino": v.destino,
-        "data": v.data,
-        "preco": v.preco,
-        "descricao": v.descricao,
-        "categoria": v.categoria,
-        "agencia": v.agencia
-    } for v in viagens]), 200
+    # Estrutura de resposta no formato desejado
+    trips = {}
+    for idx, v in enumerate(viagens, start=1):
+        trips[f"trip{idx}"] = {
+            "id": v.id,
+            "destino": v.destino,
+            "data": v.data,
+            "preco": v.preco,
+            "descricao": v.descricao,
+            "categoria": v.categoria,
+            "agencia": v.agencia
+        }
+
+    return jsonify({"trips": trips}), 200
 
 # Rota para deletar uma viagem pelo ID
 @app.route('/viagens/<int:id>', methods=['DELETE'])
