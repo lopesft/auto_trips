@@ -80,8 +80,10 @@ def listar_viagens():
         return jsonify({"quantidade_trips": 0, "trips": []}), 200
 
     if index is not None:  # Se um índice for fornecido
-        if 0 <= index < len(viagens):  # Valida o índice
-            viagem = viagens[index]
+        # Ajusta para considerar índices baseados em 1
+        adjusted_index = index - 1
+        if 0 <= adjusted_index < len(viagens):  # Valida o índice ajustado
+            viagem = viagens[adjusted_index]
             return jsonify({
                 "agencia": viagem.agencia,
                 "categoria": viagem.categoria,
@@ -101,7 +103,6 @@ def listar_viagens():
               "preco": v.preco, "imagem_url": v.imagem_url} for v in viagens]
 
     return jsonify({"quantidade_trips": len(trips), "trips": trips}), 200
-
 
 # Rota para deletar uma viagem pelo ID
 @app.route('/viagens/<int:id>', methods=['DELETE'])
